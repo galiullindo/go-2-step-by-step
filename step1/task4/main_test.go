@@ -2,33 +2,12 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"strings"
 	"testing"
+
+	"github.com/galiullindo/yandex_go2_step_by_step/step1/testutils"
 )
-
-type customReader struct {
-}
-
-func NewCustomReader() *customReader {
-	return &customReader{}
-}
-
-func (r *customReader) Read(p []byte) (n int, err error) {
-	return 0, errors.New("error")
-}
-
-type customWriter struct {
-}
-
-func NewCustomWriter() *customWriter {
-	return &customWriter{}
-}
-
-func (w *customWriter) Write(p []byte) (n int, err error) {
-	return 0, errors.New("error")
-}
 
 func TestCopy(t *testing.T) {
 	var tests = []struct {
@@ -89,7 +68,7 @@ func TestCopy(t *testing.T) {
 		},
 		{
 			name:           "Read error",
-			reader:         NewCustomReader(),
+			reader:         testutils.NewCustomReader(),
 			writer:         bytes.NewBuffer([]byte(nil)),
 			n:              100,
 			expectedValue:  "",
@@ -98,7 +77,7 @@ func TestCopy(t *testing.T) {
 		{
 			name:           "Write error",
 			reader:         bytes.NewReader([]byte("abcdefghijklmnopqrstuvwxyz")),
-			writer:         NewCustomWriter(),
+			writer:         testutils.NewCustomWriter(),
 			n:              100,
 			expectedValue:  "",
 			errWasExpected: true,
@@ -131,7 +110,7 @@ func TestCopy(t *testing.T) {
 						test.expectedValue,
 					)
 				}
-			case *customWriter:
+			case *testutils.CustomWriter:
 				if test.expectedValue != "" {
 					t.Fatal("Error in test: custom writer only for error return check. For checking write use bytes.Buffer.")
 				}

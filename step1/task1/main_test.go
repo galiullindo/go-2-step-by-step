@@ -2,21 +2,11 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"testing"
+
+	"github.com/galiullindo/yandex_go2_step_by_step/step1/testutils"
 )
-
-type customWriter struct {
-}
-
-func NewCustomWriter() *customWriter {
-	return &customWriter{}
-}
-
-func (w *customWriter) Write(p []byte) (n int, err error) {
-	return 0, errors.New("error")
-}
 
 func TestWriteString(t *testing.T) {
 	var tests = []struct {
@@ -42,7 +32,7 @@ func TestWriteString(t *testing.T) {
 		},
 		{
 			name:           "Write error",
-			writer:         NewCustomWriter(),
+			writer:         testutils.NewCustomWriter(),
 			errWasExpected: true,
 		},
 	}
@@ -59,7 +49,7 @@ func TestWriteString(t *testing.T) {
 				if got := writer.String(); got != test.expected {
 					t.Errorf("WriteString(%s, %v), got \"%s\", expected \"%s\" ", test.s, test.writer, got, test.expected)
 				}
-			case *customWriter:
+			case *testutils.CustomWriter:
 				if test.s != "" || test.expected != "" {
 					t.Fatal("Error in test: custom writer only for error return check. For checking write use bytes.Buffer.")
 				}

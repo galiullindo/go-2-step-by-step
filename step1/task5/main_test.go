@@ -1,22 +1,12 @@
 package main
 
 import (
-	"errors"
 	"io"
 	"strings"
 	"testing"
+
+	"github.com/galiullindo/yandex_go2_step_by_step/step1/testutils"
 )
-
-type customReader struct {
-}
-
-func NewCustomReader() *customReader {
-	return &customReader{}
-}
-
-func (r *customReader) Read(p []byte) (n int, err error) {
-	return 0, errors.New("error")
-}
 
 var tests = []struct {
 	name      string
@@ -55,7 +45,7 @@ var tests = []struct {
 	},
 	{
 		name:      "Read error",
-		reader:    NewCustomReader(),
+		reader:    testutils.NewCustomReader(),
 		seq:       []byte("abc"),
 		expected:  false,
 		wantError: true,
