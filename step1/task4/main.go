@@ -1,25 +1,23 @@
 package main
 
-import "io"
+import (
+	"io"
+)
 
 func Copy(r io.Reader, w io.Writer, n uint) error {
-	var ln int
-	var err error
 	buf := make([]byte, n)
 
-	ln, err = r.Read(buf)
-	if err != nil {
-		if err == io.EOF {
-		} else {
-			return err
-		}
+	nRead, err := r.Read(buf)
+	if err == io.EOF {
+	} else if err != nil {
+		return err
 	}
 
-	if ln > 0 {
-		ln, err = w.Write(buf[:ln])
-	}
-	if err != nil {
-		return err
+	if nRead > 0 {
+		_, err := w.Write(buf[:nRead])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
