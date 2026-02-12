@@ -88,6 +88,8 @@ func TestReadAllWithContext(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
 			ctx, cancel := context.WithTimeout(context.Background(), test.timeout)
 			defer cancel()
 
@@ -153,6 +155,8 @@ func TestMakeChannelForReadeing(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
 			tempFilePath := test.filePath
 			if test.filePath != "" {
 				tempFile, err := os.CreateTemp("", test.filePath)
@@ -238,6 +242,8 @@ func TestReadJSON(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
 			tempFilePath := test.filePath
 			if test.filePath != "" {
 				tempFile, err := os.CreateTemp("", test.filePath)
